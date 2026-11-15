@@ -1,0 +1,53 @@
+{
+    "topic": "Business Equipment Purchase Agreement",
+    "party_a_name": "ABC Electronics",
+    "party_b_name": "Global Tech Suppliers",
+    "rounds": [
+        {
+            "round_number": 1,
+            "party_a_proposal": {
+                "party_name": "ABC Electronics",
+                "terms": {
+                    "price_inr": 85000,
+                    "delivery_days": 25,
+                    "warranty_months": 12
+                },
+                "explanation": "Initial purchase proposal."
+            },
+            "party_b_response": {
+                "party_name": "Global Tech Suppliers",
+                "terms": {
+                    "price_inr": 85000,
+                    "delivery_days": 25,
+                    "warranty_months": 12
+                },
+                "explanation": "Supplier response."
+            },
+            "party_a_accepted": true,
+            "party_b_accepted": true,
+            "party_a_accepted_terms": {
+                "price_inr": 85000,
+                "delivery_days": 25,
+                "warranty_months": 12
+            },
+            "party_b_accepted_terms": {
+                "price_inr": 88000,
+                "delivery_days": 25,
+                "warranty_months": 12
+            },
+            "notes": [
+                "Acceptance evidence intentionally contains different prices."
+            ]
+        }
+    ],
+    "outcome": {
+        "agreement_reached": true,
+        "final_terms": {
+            "price_inr": 85000,
+            "delivery_days": 25,
+            "warranty_months": 12
+        },
+        "unresolved_issues": [],
+        "evaluation_summary": "Both parties accepted identical terms."
+    }
+}
