@@ -1,76 +1,54 @@
+
 from fastapi import FastAPI, HTTPException
-import json
-import os 
-from agents.negotiator import Negotiator
-from scoring import calculate_compromise
+from pydantic import ValidationError
 
+from core.engine import NegotiationEngine
+from core.models import NegotiationRequest
+from providers.factory import ProviderConfigurationError
 
+app = FastAPI(
+    title="Universal Multi-Agent Negotiation API",
+    description="Configurable multi-party negotiation engine",
+    version="1.0.0",
+)
 
-app = FastAPI()
-
-#load positions at startup
-with open("./data/trade_positions.json") as f:
-    positions = json.load(f)
-
-OLLAMA_URL = os.getenv("OLLAMA_BASE_URL","http://ollama:11434")
-
-usa_agent = Negotiator("USA", positions["usa"], OLLAMA_URL)
-china_agent = Negotiator("China", positions["china"], OLLAMA_URL)
+engine = NegotiationEngine()
 
 
 @app.get("/health")
 def health():
     return {
-        "status":"ok"
+        "status": "ok",
+        "service": "Universal Negotiation API",
     }
+
 
 @app.post("/negotiate")
-async def negotiate(request: dict):
-    issue = request.get("issue")
-    rounds = request.get("rounds", 3)
+async def negotiate(request: NegotiationRequest):
+    try:
+        result = await engine.run(request)
+        return result.model_dump(mode="json")
 
-    if not issue:
+    except ProviderConfigurationError as exc:
         raise HTTPException(
-            status_code=400, 
-            detail="'issue'field is required"
-        )
-    
-    history = []
+            status_code=503,
+            detail=str(exc),
+        ) from exc
 
-    for round_number in range(1, rounds+1):
-        usa_proposal = await(usa_agent.make_proposal(issue, history))
-        china_response = await(china_agent.make_proposal(issue, history +[{"usa":usa_proposal}]))
-        round_record = {
-            "round":round_number,
-            "usa_proposal" : usa_proposal,
-            "china_response": china_response
-        }
-        history.append(round_record)
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=exc.errors(),
+        ) from exc
 
-    score = calculate_compromise(history, positions)
-    agreement = score >=0.6
-    last_round = history[-1]
-    final_terms = (
-        f"USA:{last_round['usa_proposal']}"
-        f"China:{last_round['china_response']}"
-    )
-    final_outcome = {
-        "agreement_reached":agreement,
-        "final_terms": final_terms,
-        "compromise_score":score,
-    }
-    log_entry = {"issue": issue, "rounds":history, "outcome":final_outcome}
-    _append_to_log(log_entry)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=422,
+            detail=str(exc),
+        ) from exc
 
-    return {"rounds": history, "outcome":final_outcome}
-
-def _append_to_log(entry: dict):
-    log_path = "negotiation_log.json"
-    if os.path.exists(log_path):
-        with open(log_path, "r") as f:
-            log = json.load(f)
-    else:
-        log = []
-    log.append(entry)
-    with open(log_path, "w") as f:
-        json.dump(log, f, indent=2)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail="Negotiation could not be completed.",
+        ) from exc
