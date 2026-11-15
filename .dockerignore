@@ -1,0 +1,33 @@
+
+# Git
+.git/
+.gitignore
+
+# Environment and secrets
+.env
+.env.*
+
+# Python environments and caches
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Testing artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Generated application files
+negotiation_log.json
+
+
+logo/
+agensi-skill-package/
+
+universal-multi-agent-negotiation/

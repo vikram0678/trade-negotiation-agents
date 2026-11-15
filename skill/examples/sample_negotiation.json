@@ -1,0 +1,83 @@
+{
+  "party_a": {
+    "name": "ABC Electronics",
+    "role": "Buyer",
+    "priorities": {
+      "price_inr": 0.9,
+      "delivery_days": 0.8,
+      "warranty_months": 0.7
+    },
+    "constraints": [],
+    "constraint_rules": [
+      {
+        "issue": "price_inr",
+        "operator": "le",
+        "value": 90000,
+        "hard": true
+      },
+      {
+        "issue": "delivery_days",
+        "operator": "le",
+        "value": 30,
+        "hard": true
+      },
+      {
+        "issue": "warranty_months",
+        "operator": "ge",
+        "value": 12,
+        "hard": true
+      }
+    ],
+    "background": "ABC Electronics is purchasing equipment for a new business expansion and wants competitive pricing with reliable delivery."
+  },
+  "party_b": {
+    "name": "Global Tech Suppliers",
+    "role": "Supplier",
+    "priorities": {
+      "price_inr": 0.9,
+      "delivery_days": 0.6,
+      "warranty_months": 0.5
+    },
+    "constraints": [],
+    "constraint_rules": [
+      {
+        "issue": "price_inr",
+        "operator": "ge",
+        "value": 80000,
+        "hard": true
+      },
+      {
+        "issue": "delivery_days",
+        "operator": "ge",
+        "value": 21,
+        "hard": true
+      },
+      {
+        "issue": "warranty_months",
+        "operator": "ge",
+        "value": 12,
+        "hard": true
+      }
+    ],
+    "background": "Global Tech Suppliers provides electronic equipment to business customers and aims to maintain sustainable margins while meeting customer requirements."
+  },
+  "topic": "Business Equipment Purchase Agreement",
+  "issues": [
+    {
+      "name": "price_inr",
+      "description": "Total purchase price in Indian Rupees.",
+      "unit": "INR"
+    },
+    {
+      "name": "delivery_days",
+      "description": "Number of calendar days required to deliver the equipment.",
+      "unit": "days"
+    },
+    {
+      "name": "warranty_months",
+      "description": "Warranty coverage provided with the equipment.",
+      "unit": "months"
+    }
+  ],
+  "max_rounds": 5
+}

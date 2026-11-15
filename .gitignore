@@ -1,2 +1,31 @@
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python virtual environments
+venv/
+
+# Python generated files
 __pycache__/
+*.py[cod]
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Application-generated files
 negotiation_log.json
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+
+logo/
+agensi-skill-package/
+
+universal-multi-agent-negotiation/
